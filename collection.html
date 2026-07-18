@@ -167,13 +167,7 @@
     }
 
     .mobile-menu-arrow {
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       color: var(--color-yellow);
-      font-size: 24px;
       transition: transform 0.3s;
     }
 
@@ -184,16 +178,13 @@
     .mobile-menu-content {
       max-height: 0;
       overflow: hidden;
+      padding: 0 var(--spacing-lg);
       transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .mobile-menu.active .mobile-menu-content {
       max-height: 500px;
-    }
-
-    .mobile-menu-content {
       padding: var(--spacing-lg);
-      overflow-y: auto;
     }
 
     .mobile-menu-content ul {
@@ -887,7 +878,9 @@
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobile-menu">
     <div class="mobile-menu-header" id="mobile-menu-header">
-      <div class="mobile-menu-arrow">▼</div>
+      <svg class="mobile-menu-arrow" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
     </div>
     <div class="mobile-menu-content">
       <ul id="mobile-menu-links"></ul>
