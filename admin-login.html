@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administrador - Yukly Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-black: #0a0a0a;
+      --color-white: #ffffff;
+      --color-yellow: #FFE600;
+      --color-gray: #1a1a1a;
+      --color-gray-light: #a0a0a0;
+      --color-error: #ff4444;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--color-black);
+      color: var(--color-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: var(--spacing-md);
+    }
+
+    .login-container {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .logo-box {
+      width: 80px;
+      height: 80px;
+      background: var(--color-black);
+      border: 2px solid var(--color-white);
+      margin: 0 auto var(--spacing-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: 700;
+    }
+
+    .logo-text {
+      color: var(--color-yellow);
+    }
+
+    .login-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .login-subtitle {
+      font-size: 12px;
+      color: var(--color-gray-light);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .form-input {
+      background: var(--color-gray);
+      border: 1px solid var(--color-gray);
+      color: var(--color-white);
+      padding: var(--spacing-md);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--color-yellow);
+      background: #252525;
+    }
+
+    .password-group {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: var(--spacing-md);
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--color-white);
+      cursor: pointer;
+      font-size: 18px;
+    }
+
+    .form-input.with-toggle {
+      padding-right: 40px;
+    }
+
+    .btn {
+      background: var(--color-yellow);
+      color: var(--color-black);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border: none;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s;
+      width: 100%;
+    }
+
+    .btn:hover {
+      background: #e6d000;
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .error-message {
+      background: var(--color-error);
+      color: var(--color-white);
+      padding: var(--spacing-md);
+      font-size: 14px;
+      margin-bottom: var(--spacing-lg);
+      display: none;
+    }
+
+    .error-message.show {
+      display: block;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: var(--spacing-lg);
+    }
+
+    .back-link a {
+      color: var(--color-gray-light);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .back-link a:hover {
+      color: var(--color-yellow);
+    }
+
+    .loading {
+      display: none;
+    }
+
+    .loading.show::after {
+      content: "";
+      display: inline-block;
+      width: 4px;
+      height: 4px;
+      background: var(--color-black);
+      border-radius: 50%;
+      box-shadow: 8px 0 0 var(--color-black), 16px 0 0 var(--color-black);
+      animation: dots 1.5s infinite;
+    }
+
+    @keyframes dots {
+      0%, 20% {
+        box-shadow: 8px 0 0 var(--color-black), 16px 0 0 var(--color-black);
+      }
+      40% {
+        box-shadow: 8px 0 0 transparent, 16px 0 0 var(--color-black);
+      }
+      60% {
+        box-shadow: 8px 0 0 transparent, 16px 0 0 transparent;
+      }
+      80%, 100% {
+        box-shadow: 8px 0 0 transparent, 16px 0 0 transparent;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-header">
+      <div class="logo-box">
+        <span class="logo-text">Y</span>
+      </div>
+      <h1 class="login-title">Yukly Store</h1>
+      <p class="login-subtitle">Panel administrativo</p>
+    </div>
+
+    <div class="error-message" id="error-message"></div>
+
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" id="email" placeholder="tu@email.com" required>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Contraseña</label>
+        <div class="password-group">
+          <input type="password" class="form-input with-toggle" id="password" placeholder="••••••••" required>
+          <button type="button" class="toggle-password" onclick="togglePassword()">👁</button>
+        </div>
+      </div>
+
+      <button type="submit" class="btn" id="btn-login">
+        Ingresar
+        <span class="loading" id="loading"></span>
+      </button>
+    </form>
+
+    <div class="back-link">
+      <a href="index.html">← Volver a la tienda</a>
+    </div>
+  </div>
+
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_AUTH_DOMAIN",
+      projectId: "TU_PROJECT_ID",
+      storageBucket: "TU_STORAGE_BUCKET",
+      messagingSenderId: "TU_MESSAGING_SENDER_ID",
+      appId: "TU_APP_ID"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        window.location.href = "admin.html";
+      }
+    });
+
+    window.togglePassword = function() {
+      const input = document.getElementById("password");
+      input.type = input.type === "password" ? "text" : "password";
+    };
+
+    window.handleLogin = async function(event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      const errorEl = document.getElementById("error-message");
+      const loadingEl = document.getElementById("loading");
+      const btnLogin = document.getElementById("btn-login");
+
+      errorEl.classList.remove("show");
+
+      if (!email || !password) {
+        showError("Por favor completa todos los campos");
+        return;
+      }
+
+      btnLogin.disabled = true;
+      loadingEl.classList.add("show");
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (error) {
+        let message = "Error al ingresar";
+        if (error.code === "auth/user-not-found") {
+          message = "El email no está registrado";
+        } else if (error.code === "auth/wrong-password") {
+          message = "Contraseña incorrecta";
+        } else if (error.code === "auth/invalid-email") {
+          message = "Email inválido";
+        } else if (error.code === "auth/too-many-requests") {
+          message = "Demasiados intentos. Intenta más tarde";
+        }
+        showError(message);
+        btnLogin.disabled = false;
+        loadingEl.classList.remove("show");
+      }
+    };
+
+    function showError(message) {
+      const errorEl = document.getElementById("error-message");
+      errorEl.textContent = message;
+      errorEl.classList.add("show");
+    }
+
+    document.getElementById("email").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        document.getElementById("password").focus();
+      }
+    });
+
+    document.getElementById("password").addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        document.getElementById("login-form").dispatchEvent(new Event("submit"));
+      }
+    });
+  </script>
+</body>
+</html>

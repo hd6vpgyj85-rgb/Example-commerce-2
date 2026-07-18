@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Admin - Yukly Store</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --color-black: #0a0a0a;
+      --color-white: #ffffff;
+      --color-yellow: #FFE600;
+      --color-gray: #1a1a1a;
+      --color-gray-light: #a0a0a0;
+      --color-success: #25d366;
+      --color-error: #ff4444;
+      --spacing-xs: 4px;
+      --spacing-sm: 8px;
+      --spacing-md: 16px;
+      --spacing-lg: 24px;
+      --spacing-xl: 32px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--color-black);
+      color: var(--color-white);
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background: var(--color-black);
+      border-right: 1px solid var(--color-gray);
+      padding: var(--spacing-lg);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-md);
+    }
+
+    .sidebar-tab {
+      padding: var(--spacing-md);
+      background: transparent;
+      border: none;
+      color: var(--color-white);
+      cursor: pointer;
+      text-align: left;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s;
+    }
+
+    .sidebar-tab:hover {
+      background: var(--color-gray);
+    }
+
+    .sidebar-tab.active {
+      background: var(--color-gray);
+      color: var(--color-yellow);
+      border-left: 3px solid var(--color-yellow);
+    }
+
+    .btn-logout {
+      padding: var(--spacing-md);
+      background: transparent;
+      border: 1px solid var(--color-gray-light);
+      color: var(--color-gray-light);
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .btn-logout:hover {
+      border-color: var(--color-error);
+      color: var(--color-error);
+    }
+
+    /* Main */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .topbar {
+      background: var(--color-black);
+      border-bottom: 1px solid var(--color-gray);
+      padding: var(--spacing-lg);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .topbar-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .topbar-link {
+      color: var(--color-white);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s;
+    }
+
+    .topbar-link:hover {
+      color: var(--color-yellow);
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      overflow-y: auto;
+      padding: var(--spacing-lg);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-2xl);
+    }
+
+    .stat-card {
+      background: var(--color-gray);
+      padding: var(--spacing-lg);
+      text-align: center;
+    }
+
+    .stat-value {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--color-yellow);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--color-gray-light);
+      text-transform: uppercase;
+    }
+
+    /* Header */
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .btn {
+      background: var(--color-yellow);
+      color: var(--color-black);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .btn:hover {
+      background: #e6d000;
+    }
+
+    .btn-secondary {
+      background: var(--color-gray);
+      color: var(--color-white);
+      border: 1px solid var(--color-gray);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--color-yellow);
+    }
+
+    .btn-danger {
+      background: var(--color-error);
+      color: var(--color-white);
+    }
+
+    .btn-danger:hover {
+      opacity: 0.9;
+    }
+
+    /* Table */
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    th {
+      background: var(--color-gray);
+      padding: var(--spacing-md);
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 1px solid #2a2a2a;
+    }
+
+    td {
+      padding: var(--spacing-md);
+      border-bottom: 1px solid var(--color-gray);
+    }
+
+    tr:hover {
+      background: #151515;
+    }
+
+    .table-image {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      background: var(--color-gray);
+    }
+
+    .table-image.empty::before {
+      content: "📦";
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .stock-badge {
+      display: inline-block;
+      padding: var(--spacing-xs) var(--spacing-sm);
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .stock-badge.in-stock {
+      background: var(--color-success);
+      color: var(--color-white);
+    }
+
+    .stock-badge.low-stock {
+      background: var(--color-yellow);
+      color: var(--color-black);
+    }
+
+    .stock-badge.sold-out {
+      background: var(--color-error);
+      color: var(--color-white);
+    }
+
+    .inline-controls {
+      display: flex;
+      gap: var(--spacing-sm);
+      align-items: center;
+    }
+
+    .qty-btn {
+      background: var(--color-gray);
+      border: 1px solid var(--color-gray);
+      color: var(--color-white);
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: all 0.3s;
+    }
+
+    .qty-btn:hover {
+      background: var(--color-yellow);
+      color: var(--color-black);
+    }
+
+    .qty-input {
+      width: 40px;
+      background: transparent;
+      border: 1px solid var(--color-gray);
+      color: var(--color-white);
+      padding: var(--spacing-xs);
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .qty-input:focus {
+      outline: none;
+      border-color: var(--color-yellow);
+    }
+
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+    }
+
+    .modal {
+      background: var(--color-black);
+      border: 1px solid var(--color-yellow);
+      padding: var(--spacing-xl);
+      max-width: 600px;
+      width: 95%;
+      max-height: 90vh;
+      overflow-y: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: var(--spacing-md);
+      right: var(--spacing-md);
+      background: none;
+      border: none;
+      color: var(--color-white);
+      cursor: pointer;
+      font-size: 24px;
+    }
+
+    .modal-header {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: var(--spacing-lg);
+      padding-right: var(--spacing-lg);
+    }
+
+    .modal-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--spacing-lg);
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+
+    .form-group.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .form-label {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .form-input, .form-select, .form-textarea {
+      background: var(--color-gray);
+      border: 1px solid var(--color-gray);
+      color: var(--color-white);
+      padding: var(--spacing-md);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      outline: none;
+      border-color: var(--color-yellow);
+      background: #252525;
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    .form-input[type="number"] {
+      width: 100%;
+    }
+
+    .image-preview {
+      width: 100px;
+      height: 100px;
+      background: var(--color-gray);
+      margin-top: var(--spacing-md);
+      object-fit: cover;
+    }
+
+    .image-input-group {
+      display: flex;
+      gap: var(--spacing-md);
+      margin-bottom: var(--spacing-md);
+    }
+
+    .image-input-group input {
+      flex: 1;
+    }
+
+    .image-input-group button {
+      background: var(--color-gray);
+      border: 1px solid var(--color-gray);
+      color: var(--color-white);
+      padding: var(--spacing-md);
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .image-list {
+      display: flex;
+      gap: var(--spacing-md);
+      flex-wrap: wrap;
+      margin-top: var(--spacing-md);
+    }
+
+    .image-item {
+      position: relative;
+      width: 80px;
+      height: 80px;
+    }
+
+    .image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .image-item-remove {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--color-error);
+      border: none;
+      color: var(--color-white);
+      width: 24px;
+      height: 24px;
+      cursor: pointer;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: var(--spacing-md);
+      grid-column: 1 / -1;
+      margin-top: var(--spacing-lg);
+    }
+
+    .modal-actions .btn {
+      flex: 1;
+    }
+
+    /* Collections Grid */
+    .collections-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: var(--spacing-lg);
+    }
+
+    .collection-card {
+      background: var(--color-gray);
+      padding: var(--spacing-lg);
+      text-align: center;
+      position: relative;
+    }
+
+    .collection-card-image {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .collection-card-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      margin-bottom: var(--spacing-sm);
+    }
+
+    .collection-card-count {
+      font-size: 12px;
+      color: var(--color-gray-light);
+      margin-bottom: var(--spacing-lg);
+    }
+
+    .collection-card-actions {
+      display: flex;
+      gap: var(--spacing-sm);
+    }
+
+    .collection-card-actions .btn {
+      flex: 1;
+      font-size: 12px;
+    }
+
+    /* Statistics */
+    .stats-section {
+      display: flex;
+      flex-direction: column;
+      gap: var(--spacing-lg);
+    }
+
+    .stat-chart {
+      background: var(--color-gray);
+      padding: var(--spacing-lg);
+    }
+
+    .stat-chart-title {
+      font-weight: 600;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .stat-bar {
+      display: flex;
+      gap: var(--spacing-md);
+      align-items: center;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .stat-bar-label {
+      width: 100px;
+      font-size: 13px;
+    }
+
+    .stat-bar-fill {
+      flex: 1;
+      height: 24px;
+      background: var(--color-yellow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-bar-text {
+      position: absolute;
+      right: var(--spacing-md);
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-black);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: var(--spacing-lg);
+      right: var(--spacing-lg);
+      padding: var(--spacing-md) var(--spacing-lg);
+      border-radius: 0;
+      font-weight: 600;
+      z-index: 2000;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .toast.success {
+      background: var(--color-yellow);
+      color: var(--color-black);
+    }
+
+    .toast.error {
+      background: var(--color-error);
+      color: var(--color-white);
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateX(400px);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      body {
+        flex-direction: column;
+      }
+
+      .sidebar {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 70%;
+        height: 100%;
+        z-index: 100;
+        border-right: 1px solid var(--color-yellow);
+      }
+
+      .sidebar.mobile-open {
+        display: flex;
+      }
+
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 50;
+      }
+
+      .sidebar-overlay.mobile-open {
+        display: block;
+      }
+
+      .main {
+        height: calc(100vh - 60px);
+      }
+
+      .topbar {
+        padding: var(--spacing-md);
+      }
+
+      .topbar-title {
+        font-size: 16px;
+      }
+
+      .content {
+        padding: var(--spacing-md);
+      }
+
+      .modal {
+        width: 95%;
+      }
+
+      .modal-body {
+        grid-template-columns: 1fr;
+      }
+
+      .table-wrapper {
+        overflow-x: auto;
+      }
+
+      .collections-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stats-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .toast {
+        left: var(--spacing-lg);
+        right: var(--spacing-lg);
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar Overlay (Mobile) -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">Yukly Store</div>
+    <nav class="sidebar-nav">
+      <button class="sidebar-tab active" onclick="switchTab('products')">Productos</button>
+      <button class="sidebar-tab" onclick="switchTab('collections')">Colecciones</button>
+      <button class="sidebar-tab" onclick="switchTab('stats')">Estadísticas</button>
+    </nav>
+    <button class="btn-logout" onclick="logout()">Cerrar sesión</button>
+  </aside>
+
+  <!-- Main -->
+  <div class="main">
+    <!-- Topbar -->
+    <div class="topbar">
+      <h2 class="topbar-title" id="topbar-title">Productos</h2>
+      <a href="index.html" target="_blank" class="topbar-link">Ver tienda →</a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Products Tab -->
+      <div class="tab-content active" id="tab-products">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-products">0</div>
+            <div class="stat-label">Total Productos</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-total-collections">0</div>
+            <div class="stat-label">Colecciones</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-sold-out">0</div>
+            <div class="stat-label">Agotados</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="stat-low-stock">0</div>
+            <div class="stat-label">Stock Bajo</div>
+          </div>
+        </div>
+
+        <div class="section-header">
+          <h3 class="section-title">Productos</h3>
+          <button class="btn" onclick="openProductModal()">+ Nuevo producto</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Imagen</th>
+                <th>Nombre</th>
+                <th>Colección</th>
+                <th>Precio</th>
+                <th>Stock</th>
+                <th>Marca</th>
+                <th>Etiquetas</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="products-tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Collections Tab -->
+      <div class="tab-content" id="tab-collections">
+        <div class="section-header">
+          <h3 class="section-title">Colecciones</h3>
+          <button class="btn" onclick="openCollectionModal()">+ Nueva colección</button>
+        </div>
+
+        <div class="collections-grid" id="collections-grid">
+        </div>
+      </div>
+
+      <!-- Statistics Tab -->
+      <div class="tab-content" id="tab-stats">
+        <h3 class="section-title" style="margin-bottom: var(--spacing-xl);">Resumen</h3>
+
+        <div class="stats-section">
+          <div class="stat-chart">
+            <div class="stat-chart-title">Stock Bajo (5 o menos)</div>
+            <div id="low-stock-list"></div>
+          </div>
+
+          <div class="stat-chart">
+            <div class="stat-chart-title">Distribución por Colección</div>
+            <div id="distribution-chart"></div>
+          </div>
+
+          <div class="stat-card" style="text-align: center;">
+            <div class="stat-label">Valor Total en Inventario</div>
+            <div class="stat-value" id="inventory-value">$0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Modal -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeProductModal()">×</button>
+      <div class="modal-header" id="product-modal-title">Nuevo Producto</div>
+      <div class="modal-body" id="product-modal-body">
+        <div class="form-group">
+          <label class="form-label">Nombre *</label>
+          <input type="text" class="form-input" id="product-name">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Precio (MXN) *</label>
+          <input type="number" class="form-input" id="product-price" min="0">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Stock *</label>
+          <input type="number" class="form-input" id="product-stock" min="0">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Colección *</label>
+          <select class="form-select" id="product-collection"></select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Marca</label>
+          <input type="text" class="form-input" id="product-brand">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Etiquetas (separadas por coma)</label>
+          <input type="text" class="form-input" id="product-tags">
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Descripción</label>
+          <textarea class="form-textarea" id="product-description"></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Imágenes</label>
+          <div class="image-input-group">
+            <input type="url" class="form-input" id="product-image-url" placeholder="URL de la imagen">
+            <button class="btn" onclick="addProductImage()">Agregar</button>
+          </div>
+          <div class="image-list" id="product-images-list"></div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeProductModal()">Cancelar</button>
+          <button class="btn" id="btn-save-product" onclick="saveProduct()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Collection Modal -->
+  <div class="modal-overlay" id="collection-modal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeCollectionModal()">×</button>
+      <div class="modal-header" id="collection-modal-title">Nueva Colección</div>
+      <div class="modal-body">
+        <div class="form-group full-width">
+          <label class="form-label">Nombre *</label>
+          <input type="text" class="form-input" id="collection-name">
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">Descripción</label>
+          <textarea class="form-textarea" id="collection-description"></textarea>
+        </div>
+
+        <div class="form-group full-width">
+          <label class="form-label">URL de Imagen de Portada</label>
+          <input type="url" class="form-input" id="collection-image-url" placeholder="https://...">
+          <img class="image-preview" id="collection-image-preview" src="" alt="" style="display: none;">
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn btn-secondary" onclick="closeCollectionModal()">Cancelar</button>
+          <button class="btn" id="btn-save-collection" onclick="saveCollection()">Guardar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    const firebaseConfig = {
+      apiKey: "TU_API_KEY",
+      authDomain: "TU_AUTH_DOMAIN",
+      projectId: "TU_PROJECT_ID",
+      storageBucket: "TU_STORAGE_BUCKET",
+      messagingSenderId: "TU_MESSAGING_SENDER_ID",
+      appId: "TU_APP_ID"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-app.js";
+    import {
+      getAuth,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      getDocs,
+      getDoc,
+      doc,
+      query,
+      where,
+      onSnapshot,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore.js";
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    let allProducts = [];
+    let allCollections = [];
+    let currentEditingProduct = null;
+    let currentEditingCollection = null;
+    let productImages = [];
+
+    onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        window.location.href = "admin-login.html";
+      }
+    });
+
+    window.logout = async function() {
+      await signOut(auth);
+      window.location.href = "admin-login.html";
+    };
+
+    function showToast(message, type = "success") {
+      const toast = document.createElement("div");
+      toast.className = `toast ${type}`;
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function switchTab(tab) {
+      document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+      document.getElementById(`tab-${tab}`).classList.add("active");
+
+      document.querySelectorAll(".sidebar-tab").forEach(el => el.classList.remove("active"));
+      event.target.classList.add("active");
+
+      const titles = {
+        products: "Productos",
+        collections: "Colecciones",
+        stats: "Estadísticas"
+      };
+      document.getElementById("topbar-title").textContent = titles[tab];
+    }
+
+    function loadCollections() {
+      onSnapshot(collection(db, "collections"), (snapshot) => {
+        allCollections = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        updateCollectionSelects();
+        renderCollectionsGrid();
+        updateStats();
+      });
+    }
+
+    function loadProducts() {
+      onSnapshot(collection(db, "products"), (snapshot) => {
+        allProducts = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        renderProductsTable();
+        updateStats();
+        renderStatsTab();
+      });
+    }
+
+    function updateCollectionSelects() {
+      const select = document.getElementById("product-collection");
+      select.innerHTML = allCollections.map(col =>
+        `<option value="${col.id}">${col.name}</option>`
+      ).join("");
+    }
+
+    function renderProductsTable() {
+      const tbody = document.getElementById("products-tbody");
+      tbody.innerHTML = allProducts.map(product => {
+        const collection = allCollections.find(c => c.id === product.collectionId);
+        const status = product.stock === 0 ? "Agotado" : product.stock <= 5 ? "Bajo" : "Normal";
+        const statusClass = product.stock === 0 ? "sold-out" : product.stock <= 5 ? "low-stock" : "in-stock";
+
+        return `
+          <tr>
+            <td>
+              <img src="${product.images?.[0] || ''}" alt="" class="table-image ${!product.images?.[0] ? 'empty' : ''}">
+            </td>
+            <td>${product.name}</td>
+            <td>${collection?.name || "Sin colección"}</td>
+            <td>$${product.price}</td>
+            <td>
+              <div class="inline-controls">
+                <button class="qty-btn" onclick="updateStock('${product.id}', ${product.stock - 1})">−</button>
+                <input type="number" class="qty-input" value="${product.stock}" onchange="updateStock('${product.id}', parseInt(this.value))">
+                <button class="qty-btn" onclick="updateStock('${product.id}', ${product.stock + 1})">+</button>
+              </div>
+            </td>
+            <td>${product.brand || "—"}</td>
+            <td>${(product.tags || []).join(", ")}</td>
+            <td><span class="stock-badge ${statusClass}">${status}</span></td>
+            <td>
+              <button class="btn btn-secondary" style="font-size: 12px; padding: 4px 8px;" onclick="editProduct('${product.id}')">Editar</button>
+              <button class="btn btn-danger" style="font-size: 12px; padding: 4px 8px;" onclick="deleteProduct('${product.id}')">Eliminar</button>
+            </td>
+          </tr>
+        `;
+      }).join("");
+    }
+
+    function updateStats() {
+      document.getElementById("stat-total-products").textContent = allProducts.length;
+      document.getElementById("stat-total-collections").textContent = allCollections.length;
+      document.getElementById("stat-sold-out").textContent = allProducts.filter(p => p.stock === 0).length;
+      document.getElementById("stat-low-stock").textContent = allProducts.filter(p => p.stock > 0 && p.stock <= 5).length;
+    }
+
+    function renderStatsTab() {
+      const lowStockProducts = allProducts.filter(p => p.stock > 0 && p.stock <= 5).sort((a, b) => a.stock - b.stock).slice(0, 5);
+      const lowStockList = document.getElementById("low-stock-list");
+
+      if (lowStockProducts.length === 0) {
+        lowStockList.innerHTML = "<p>Todos los productos tienen stock adecuado</p>";
+      } else {
+        lowStockList.innerHTML = lowStockProducts.map(p => `
+          <div class="stat-bar">
+            <div class="stat-bar-label">${p.name}</div>
+            <div class="stat-bar-fill">
+              <div class="stat-bar-text">${p.stock} unidades</div>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      const distribution = {};
+      allCollections.forEach(col => {
+        const count = allProducts.filter(p => p.collectionId === col.id).length;
+        distribution[col.name] = count;
+      });
+
+      const maxCount = Math.max(...Object.values(distribution), 1);
+      const distributionChart = document.getElementById("distribution-chart");
+      distributionChart.innerHTML = Object.entries(distribution).map(([name, count]) => `
+        <div class="stat-bar">
+          <div class="stat-bar-label">${name}</div>
+          <div class="stat-bar-fill" style="width: ${(count / maxCount) * 100}%">
+            <div class="stat-bar-text">${count}</div>
+          </div>
+        </div>
+      `).join("");
+
+      const inventoryValue = allProducts.reduce((sum, p) => sum + (p.price * p.stock), 0);
+      document.getElementById("inventory-value").textContent = `$${inventoryValue.toLocaleString()}`;
+    }
+
+    function renderCollectionsGrid() {
+      const grid = document.getElementById("collections-grid");
+      grid.innerHTML = allCollections.map(col => {
+        const productCount = allProducts.filter(p => p.collectionId === col.id).length;
+        return `
+          <div class="collection-card">
+            <img src="${col.image || ''}" alt="${col.name}" class="collection-card-image" style="display: ${col.image ? 'block' : 'none'}">
+            <div class="collection-card-name">${col.name}</div>
+            <div class="collection-card-count">${productCount} productos</div>
+            <div class="collection-card-actions">
+              <button class="btn" style="flex: 1;" onclick="editCollection('${col.id}')">Editar</button>
+              <button class="btn btn-danger" style="flex: 1;" onclick="deleteCollection('${col.id}')">Eliminar</button>
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    window.updateStock = async function(productId, newStock) {
+      if (newStock < 0) return;
+      await updateDoc(doc(db, "products", productId), {
+        stock: newStock
+      });
+      showToast("Stock actualizado");
+    };
+
+    window.openProductModal = function() {
+      currentEditingProduct = null;
+      productImages = [];
+      document.getElementById("product-modal-title").textContent = "Nuevo Producto";
+      document.getElementById("product-name").value = "";
+      document.getElementById("product-price").value = "";
+      document.getElementById("product-stock").value = "";
+      document.getElementById("product-brand").value = "";
+      document.getElementById("product-tags").value = "";
+      document.getElementById("product-description").value = "";
+      document.getElementById("product-image-url").value = "";
+      document.getElementById("product-images-list").innerHTML = "";
+      document.getElementById("product-modal").classList.add("active");
+    };
+
+    window.closeProductModal = function() {
+      document.getElementById("product-modal").classList.remove("active");
+    };
+
+    window.addProductImage = function() {
+      const url = document.getElementById("product-image-url").value;
+      if (url) {
+        productImages.push(url);
+        document.getElementById("product-image-url").value = "";
+        renderProductImagesList();
+      }
+    };
+
+    function renderProductImagesList() {
+      const list = document.getElementById("product-images-list");
+      list.innerHTML = productImages.map((img, i) => `
+        <div class="image-item">
+          <img src="${img}" alt="Image ${i}">
+          <button class="image-item-remove" onclick="removeProductImage(${i})">×</button>
+        </div>
+      `).join("");
+    }
+
+    window.removeProductImage = function(index) {
+      productImages.splice(index, 1);
+      renderProductImagesList();
+    };
+
+    window.editProduct = async function(productId) {
+      const product = allProducts.find(p => p.id === productId);
+      if (!product) return;
+
+      currentEditingProduct = product;
+      productImages = [...(product.images || [])];
+
+      document.getElementById("product-modal-title").textContent = "Editar Producto";
+      document.getElementById("product-name").value = product.name;
+      document.getElementById("product-price").value = product.price;
+      document.getElementById("product-stock").value = product.stock;
+      document.getElementById("product-collection").value = product.collectionId;
+      document.getElementById("product-brand").value = product.brand || "";
+      document.getElementById("product-tags").value = (product.tags || []).join(", ");
+      document.getElementById("product-description").value = product.description || "";
+      document.getElementById("product-image-url").value = "";
+
+      renderProductImagesList();
+      document.getElementById("product-modal").classList.add("active");
+    };
+
+    window.saveProduct = async function() {
+      const name = document.getElementById("product-name").value;
+      const price = parseFloat(document.getElementById("product-price").value);
+      const stock = parseInt(document.getElementById("product-stock").value);
+      const collectionId = document.getElementById("product-collection").value;
+      const brand = document.getElementById("product-brand").value;
+      const tags = document.getElementById("product-tags").value.split(",").map(t => t.trim()).filter(t => t);
+      const description = document.getElementById("product-description").value;
+
+      if (!name || !price || stock === "" || !collectionId) {
+        showToast("Por favor completa los campos obligatorios", "error");
+        return;
+      }
+
+      if (productImages.length === 0) {
+        showToast("Por favor agrega al menos una imagen", "error");
+        return;
+      }
+
+      const data = {
+        name,
+        price,
+        stock,
+        collectionId,
+        brand,
+        tags,
+        description,
+        images: productImages
+      };
+
+      try {
+        if (currentEditingProduct) {
+          await updateDoc(doc(db, "products", currentEditingProduct.id), data);
+          showToast("Producto actualizado");
+        } else {
+          data.createdAt = serverTimestamp();
+          await addDoc(collection(db, "products"), data);
+          showToast("Producto creado");
+        }
+        closeProductModal();
+      } catch (error) {
+        showToast("Error al guardar", "error");
+      }
+    };
+
+    window.deleteProduct = async function(productId) {
+      if (confirm("¿Eliminar este producto?")) {
+        try {
+          await deleteDoc(doc(db, "products", productId));
+          showToast("Producto eliminado");
+        } catch (error) {
+          showToast("Error al eliminar", "error");
+        }
+      }
+    };
+
+    window.openCollectionModal = function() {
+      currentEditingCollection = null;
+      document.getElementById("collection-modal-title").textContent = "Nueva Colección";
+      document.getElementById("collection-name").value = "";
+      document.getElementById("collection-description").value = "";
+      document.getElementById("collection-image-url").value = "";
+      document.getElementById("collection-image-preview").style.display = "none";
+      document.getElementById("collection-modal").classList.add("active");
+    };
+
+    window.closeCollectionModal = function() {
+      document.getElementById("collection-modal").classList.remove("active");
+    };
+
+    document.getElementById("collection-image-url")?.addEventListener("change", (e) => {
+      const url = e.target.value;
+      const preview = document.getElementById("collection-image-preview");
+      if (url) {
+        preview.src = url;
+        preview.style.display = "block";
+      } else {
+        preview.style.display = "none";
+      }
+    });
+
+    window.editCollection = async function(collectionId) {
+      const collection = allCollections.find(c => c.id === collectionId);
+      if (!collection) return;
+
+      currentEditingCollection = collection;
+      document.getElementById("collection-modal-title").textContent = "Editar Colección";
+      document.getElementById("collection-name").value = collection.name;
+      document.getElementById("collection-description").value = collection.description || "";
+      document.getElementById("collection-image-url").value = collection.image || "";
+
+      const preview = document.getElementById("collection-image-preview");
+      if (collection.image) {
+        preview.src = collection.image;
+        preview.style.display = "block";
+      } else {
+        preview.style.display = "none";
+      }
+
+      document.getElementById("collection-modal").classList.add("active");
+    };
+
+    window.saveCollection = async function() {
+      const name = document.getElementById("collection-name").value;
+      const description = document.getElementById("collection-description").value;
+      const image = document.getElementById("collection-image-url").value;
+
+      if (!name) {
+        showToast("Por favor ingresa el nombre", "error");
+        return;
+      }
+
+      const data = {
+        name,
+        description,
+        image
+      };
+
+      try {
+        if (currentEditingCollection) {
+          await updateDoc(doc(db, "collections", currentEditingCollection.id), data);
+          showToast("Colección actualizada");
+        } else {
+          data.createdAt = serverTimestamp();
+          await addDoc(collection(db, "collections"), data);
+          showToast("Colección creada");
+        }
+        closeCollectionModal();
+      } catch (error) {
+        showToast("Error al guardar", "error");
+      }
+    };
+
+    window.deleteCollection = async function(collectionId) {
+      const hasProducts = allProducts.some(p => p.collectionId === collectionId);
+      if (hasProducts) {
+        showToast("No puedes eliminar una colección con productos asignados", "error");
+        return;
+      }
+
+      if (confirm("¿Eliminar esta colección?")) {
+        try {
+          await deleteDoc(doc(db, "collections", collectionId));
+          showToast("Colección eliminada");
+        } catch (error) {
+          showToast("Error al eliminar", "error");
+        }
+      }
+    };
+
+    loadCollections();
+    loadProducts();
+  </script>
+</body>
+</html>
