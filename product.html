@@ -44,12 +44,19 @@
 
     /* Navbar */
     nav {
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       background: var(--color-black);
       border-bottom: 1px solid var(--color-gray);
       z-index: 100;
       padding: var(--spacing-md);
+      transition: transform 0.3s ease;
+    }
+
+    nav.hidden {
+      transform: translateY(-100%);
     }
 
     .navbar-container {
@@ -150,6 +157,11 @@
       z-index: 150;
       border-top: 3px solid var(--color-yellow);
       box-shadow: 0 2px 20px rgba(255, 230, 0, 0.1);
+      transition: transform 0.3s ease;
+    }
+
+    .mobile-menu.hidden {
+      transform: translateY(-100%);
     }
 
     .mobile-menu-header {
@@ -183,7 +195,7 @@
     }
 
     .mobile-menu.active .mobile-menu-content {
-      max-height: 500px;
+      max-height: 300px;
       padding: var(--spacing-lg);
     }
 
@@ -479,7 +491,7 @@
       display: inline-block;
       transition: all 0.3s;
       font-weight: 600;
-      border: none;
+      border: 2px solid var(--color-white);
       font-family: 'Inter', sans-serif;
     }
 
@@ -487,6 +499,7 @@
       background: var(--color-yellow);
       color: var(--color-black);
       flex: 1;
+      border: 2px solid var(--color-yellow);
     }
 
     .btn-primary:hover:not(:disabled) {
@@ -712,7 +725,7 @@
       text-align: center;
       cursor: pointer;
       font-weight: 600;
-      border: none;
+      border: 2px solid var(--color-success);
       font-family: 'Inter', sans-serif;
       transition: all 0.3s;
     }
@@ -1519,6 +1532,21 @@
     document.getElementById("mobile-menu-header").addEventListener("click", () => {
       const menu = document.getElementById("mobile-menu");
       menu.classList.toggle("active");
+    });
+
+    let lastScrollTop = 0;
+    const navbar = document.querySelector("nav");
+    const mobileMenu = document.getElementById("mobile-menu");
+    window.addEventListener("scroll", () => {
+      let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+      if (currentScroll > lastScrollTop && currentScroll > 100) {
+        navbar.classList.add("hidden");
+        mobileMenu.classList.add("hidden");
+      } else {
+        navbar.classList.remove("hidden");
+        mobileMenu.classList.remove("hidden");
+      }
+      lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     });
 
     loadCart();
