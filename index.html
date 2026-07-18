@@ -140,32 +140,6 @@
 
     .hamburger {
       display: none;
-      flex-direction: column;
-      cursor: pointer;
-      gap: 4px;
-      background: none;
-      border: none;
-      padding: 0;
-      transition: all 0.3s;
-    }
-
-    .hamburger span {
-      width: 24px;
-      height: 2px;
-      background: var(--color-white);
-      transition: all 0.3s;
-    }
-
-    .hamburger.active span:nth-child(1) {
-      transform: rotate(45deg) translateY(10px);
-    }
-
-    .hamburger.active span:nth-child(2) {
-      opacity: 0;
-    }
-
-    .hamburger.active span:nth-child(3) {
-      transform: rotate(-45deg) translateY(-10px);
     }
 
     /* Mobile Navbar */
@@ -210,39 +184,48 @@
       top: 60px;
       width: 100%;
       background: var(--color-black);
+      z-index: 150;
       border-top: 3px solid var(--color-yellow);
       box-shadow: 0 2px 20px rgba(255, 230, 0, 0.1);
-      z-index: 150;
-      max-height: 0;
-      overflow: hidden;
-      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .mobile-menu.active {
-      max-height: 500px;
     }
 
     .mobile-menu-header {
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: var(--spacing-md);
-      border-bottom: 1px solid var(--color-gray);
+      padding: var(--spacing-lg);
+      cursor: pointer;
+      transition: all 0.3s;
+      min-height: 60px;
+    }
+
+    .mobile-menu-header:active {
+      background: rgba(255, 230, 0, 0.05);
     }
 
     .mobile-menu-arrow {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       display: flex;
       align-items: center;
       justify-content: center;
       color: var(--color-yellow);
-      font-size: 20px;
+      font-size: 24px;
       transition: transform 0.3s;
     }
 
     .mobile-menu.active .mobile-menu-arrow {
       transform: rotate(180deg);
+    }
+
+    .mobile-menu-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-menu.active .mobile-menu-content {
+      max-height: 500px;
     }
 
     .mobile-menu-content {
@@ -1027,18 +1010,13 @@
           </svg>
           <div class="cart-badge" id="cart-badge"></div>
         </div>
-        <div class="hamburger" id="hamburger">
-          <span></span>
-          <span></span>
-          <span></span>
-        </div>
       </div>
     </div>
   </nav>
 
   <!-- Mobile Menu -->
   <div class="mobile-menu" id="mobile-menu">
-    <div class="mobile-menu-header">
+    <div class="mobile-menu-header" id="mobile-menu-header">
       <div class="mobile-menu-arrow">▼</div>
     </div>
     <div class="mobile-menu-content">
@@ -1568,25 +1546,15 @@
 
     document.getElementById("btn-send-whatsapp").addEventListener("click", sendToWhatsApp);
 
-    document.getElementById("hamburger").addEventListener("click", () => {
+    document.getElementById("mobile-menu-header").addEventListener("click", () => {
       const menu = document.getElementById("mobile-menu");
-      const hamburger = document.getElementById("hamburger");
       menu.classList.toggle("active");
-      hamburger.classList.toggle("active");
     });
 
     function closeMenu() {
       const menu = document.getElementById("mobile-menu");
-      const hamburger = document.getElementById("hamburger");
       menu.classList.remove("active");
-      hamburger.classList.remove("active");
     }
-
-    document.getElementById("mobile-menu").addEventListener("click", (e) => {
-      if (e.target.closest('.mobile-menu-header')) {
-        document.getElementById("hamburger").click();
-      }
-    });
 
     // Search
     document.getElementById("search-desktop").addEventListener("input", (e) => {
